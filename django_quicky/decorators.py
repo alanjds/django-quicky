@@ -18,6 +18,7 @@ from .utils import HttpResponseException
 __all__ = ["view", "routing"]
 
 DJANGO_GTE_17 = django.VERSION >= (1, 7)
+DJANGO_GTE_110 = django.VERSION >= (1, 10)
 
 
 def render_if(self, render_to=None, condition=lambda: False):
@@ -171,13 +172,14 @@ def routing(root=""):
     urlpatterns = UrlList()
 
     def url(regex, kwargs=None, name=None, prefix=''):
+        if prefix and DJANGO_GTE_110:
+            raise RuntimeError("Support for 'prefix' option on url() was dropped in Django 1.10. Please update your code")
 
         def decorator(func):
-
+            kwargs = {'prefix': prefix} if prefix else {}
             urlpatterns.append(
-                addurl(regex, func, kwargs, name or func.__name__, prefix),
+                addurl(regex, func, kwargs, name or func.__name__, **kwargs),
             )
-
             return func
 
         return decorator
