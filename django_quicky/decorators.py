@@ -17,7 +17,7 @@ from .utils import HttpResponseException
 
 __all__ = ["view", "routing"]
 
-DJANGO_GTE_17 = django.VERSION[0] >= 1 and django.VERSION[1] >= 7
+DJANGO_GTE_17 = django.VERSION >= (1, 7)
 
 
 def render_if(self, render_to=None, condition=lambda: False):
