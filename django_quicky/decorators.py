@@ -177,8 +177,9 @@ def routing(root=""):
 
         def decorator(func):
             kwargs = {'prefix': prefix} if prefix else {}
+            final_func = func.as_view() if hasattr(func, 'as_view') else func
             urlpatterns.append(
-                addurl(regex, func, kwargs, name or func.__name__, **kwargs),
+                addurl(regex, final_func, kwargs, name or func.__name__, **kwargs),
             )
             return func
 
